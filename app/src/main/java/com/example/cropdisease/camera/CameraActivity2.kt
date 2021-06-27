@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.cropdisease.R
 import com.example.cropdisease.cameraResult.CameraResults
+import com.example.cropdisease.cameraResult.OnlineModel
 import java.io.*
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -54,7 +55,7 @@ class CameraActivity2 : AppCompatActivity() {
         viewFinder = findViewById(R.id.viewFinderCamera)
 
         supportActionBar?.hide()
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
             window.statusBarColor = ContextCompat.getColor(this, R.color.black)//status bar or the time bar at the top
         }
@@ -97,7 +98,7 @@ class CameraActivity2 : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener(
-            Runnable {
+            {
 
                 val cameraProvider = cameraProviderFuture.get()
                 preview = Preview.Builder().build()
@@ -225,9 +226,15 @@ class CameraActivity2 : AppCompatActivity() {
     }
 
     fun passImageData(img: String){
-        val intent =  Intent(this, CameraResults::class.java)
-        intent.putExtra(IMAGE_URI, img)
-        startActivity(intent)
+        if (isOnline(this)){
+            val intent =  Intent(this, OnlineModel::class.java)
+            intent.putExtra(IMAGE_URI, img)
+            startActivity(intent)
+        }else{
+            val intent =  Intent(this, CameraResults::class.java)
+            intent.putExtra(IMAGE_URI, img)
+            startActivity(intent)
+        }
     }
 
     private fun isOnline(activity: AppCompatActivity): Boolean {
