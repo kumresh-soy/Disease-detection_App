@@ -72,6 +72,7 @@ class OnlineModel : AppCompatActivity() {
     }
 
     private fun callAPI(encodeString: String) {
+        //Replace url here
         val url = "https://predict-f2xawc2bfq-el.a.run.app/"
         val queue = Volley.newRequestQueue(this)
 
